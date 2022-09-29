@@ -47,7 +47,7 @@ set(dependencies
 )
 
 install(
-  DIRECTORY launch rviz urdf worlds include models
+  DIRECTORY launch rviz urdf worlds include models STLs
   DESTINATION share/${PROJECT_NAME}
 )
 

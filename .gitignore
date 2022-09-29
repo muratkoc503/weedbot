@@ -4,4 +4,5 @@ install/*
 
 log/*
 
-!src/weed_simulation/src
+*
+!.gitignore

@@ -3,5 +3,3 @@ build/*
 install/*
 
 log/*
-
-!src/weed_simulation/*

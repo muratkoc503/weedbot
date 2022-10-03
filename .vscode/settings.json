@@ -1,0 +1,12 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/murat/turtlebot3_ws/install/turtlebot3_teleop/lib/python3.8/site-packages",
+        "/home/murat/turtlebot3_ws/install/turtlebot3_example/lib/python3.8/site-packages",
+        "/home/murat/turtlebot3_ws/install/turtlebot3_msgs/lib/python3.8/site-packages",
+        "/home/murat/turtlebot3_ws/install/dynamixel_sdk_custom_interfaces/lib/python3.8/site-packages",
+        "/opt/ros/galactic/lib/python3.8/site-packages"
+    ],
+    "files.associations": {
+        "functional": "cpp"
+    }
+}

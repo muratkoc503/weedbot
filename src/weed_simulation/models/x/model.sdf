@@ -45,7 +45,23 @@
           </friction>
         </surface>
       </collision>
-      <collision name='base_footprint_fixed_joint_lump__front_left_collision_2'>
+      <collision name='base_footprint_fixed_joint_lump__camera_link_collision_2'>
+        <pose>0.4 0 0.8 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.03 0.027</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='base_footprint_fixed_joint_lump__front_left_collision_3'>
         <pose>0.4 0.65 0.8 0 -0 0</pose>
         <geometry>
           <box>
@@ -61,7 +77,7 @@
           </friction>
         </surface>
       </collision>
-      <collision name='base_footprint_fixed_joint_lump__front_right_collision_3'>
+      <collision name='base_footprint_fixed_joint_lump__front_right_collision_4'>
         <pose>0.4 -0.65 0.8 0 -0 0</pose>
         <geometry>
           <box>
@@ -77,7 +93,7 @@
           </friction>
         </surface>
       </collision>
-      <collision name='base_footprint_fixed_joint_lump__top_back_collision_4'>
+      <collision name='base_footprint_fixed_joint_lump__top_back_collision_5'>
         <pose>-0.4 0 1.05 0 -0 0</pose>
         <geometry>
           <box>
@@ -93,7 +109,7 @@
           </friction>
         </surface>
       </collision>
-      <collision name='base_footprint_fixed_joint_lump__top_front_collision_5'>
+      <collision name='base_footprint_fixed_joint_lump__top_front_collision_6'>
         <pose>0.4 0 1.05 0 -0 0</pose>
         <geometry>
           <box>
@@ -109,7 +125,7 @@
           </friction>
         </surface>
       </collision>
-      <collision name='base_footprint_fixed_joint_lump__top_left_collision_6'>
+      <collision name='base_footprint_fixed_joint_lump__top_left_collision_7'>
         <pose>0 0.65 1.05 0 -0 0</pose>
         <geometry>
           <box>
@@ -125,7 +141,7 @@
           </friction>
         </surface>
       </collision>
-      <collision name='base_footprint_fixed_joint_lump__top_right_collision_7'>
+      <collision name='base_footprint_fixed_joint_lump__top_right_collision_8'>
         <pose>0 -0.65 1.05 0 -0 0</pose>
         <geometry>
           <box>
@@ -169,7 +185,15 @@
           </script>
         </material>
       </visual>
-      <visual name='base_footprint_fixed_joint_lump__front_left_visual_2'>
+      <visual name='base_footprint_fixed_joint_lump__camera_link_visual_2'>
+        <pose>0.4 0 0.8 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.03 0.027</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='base_footprint_fixed_joint_lump__front_left_visual_3'>
         <pose>0.4 0.65 0.8 0 -0 0</pose>
         <geometry>
           <box>
@@ -183,7 +207,7 @@
           </script>
         </material>
       </visual>
-      <visual name='base_footprint_fixed_joint_lump__front_right_visual_3'>
+      <visual name='base_footprint_fixed_joint_lump__front_right_visual_4'>
         <pose>0.4 -0.65 0.8 0 -0 0</pose>
         <geometry>
           <box>
@@ -197,7 +221,7 @@
           </script>
         </material>
       </visual>
-      <visual name='base_footprint_fixed_joint_lump__top_back_visual_4'>
+      <visual name='base_footprint_fixed_joint_lump__top_back_visual_5'>
         <pose>-0.4 0 1.05 0 -0 0</pose>
         <geometry>
           <box>
@@ -211,7 +235,7 @@
           </script>
         </material>
       </visual>
-      <visual name='base_footprint_fixed_joint_lump__top_front_visual_5'>
+      <visual name='base_footprint_fixed_joint_lump__top_front_visual_6'>
         <pose>0.4 0 1.05 0 -0 0</pose>
         <geometry>
           <box>
@@ -225,7 +249,7 @@
           </script>
         </material>
       </visual>
-      <visual name='base_footprint_fixed_joint_lump__top_left_visual_6'>
+      <visual name='base_footprint_fixed_joint_lump__top_left_visual_7'>
         <pose>0 0.65 1.05 0 -0 0</pose>
         <geometry>
           <box>
@@ -239,7 +263,7 @@
           </script>
         </material>
       </visual>
-      <visual name='base_footprint_fixed_joint_lump__top_right_visual_7'>
+      <visual name='base_footprint_fixed_joint_lump__top_right_visual_8'>
         <pose>0 -0.65 1.05 0 -0 0</pose>
         <geometry>
           <box>
@@ -253,6 +277,41 @@
           </script>
         </material>
       </visual>
+      <sensor name='camera' type='camera'>
+        <update_rate>30</update_rate>
+        <camera name='head'>
+          <horizontal_fov>1.39626</horizontal_fov>
+          <image>
+            <width>800</width>
+            <height>600</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name='camera_controller' filename='libgazebo_ros_camera.so'>
+          <alwaysOn>1</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>iRobot/camera</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>camera_link</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+        <pose>0.4 0 0.8 0 -0 0</pose>
+      </sensor>
     </link>
     <joint name='back_cl_j' type='revolute'>
       <pose relative_to='base_footprint'>-0.4 0.65 0.18 0 -0 0</pose>
@@ -604,7 +663,6 @@
         </material>
       </visual>
     </link>
-    <static>0</static>
     <plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
       <update_rate>30</update_rate>
       <left_joint>front_wl_j</left_joint>
@@ -633,5 +691,54 @@
       <joint_name>back_cl_j</joint_name>
       <joint_name>back_cr_j</joint_name>
     </plugin>
+    <frame name='back_left_joint' attached_to='base_link'>
+      <pose>-0.4 0.65 0 0 -0 0</pose>
+    </frame>
+    <frame name='back_left' attached_to='back_left_joint'/>
+    <frame name='back_right_joint' attached_to='base_link'>
+      <pose>-0.4 -0.65 0 0 -0 0</pose>
+    </frame>
+    <frame name='back_right' attached_to='back_right_joint'/>
+    <frame name='camera_rgb_optical_joint' attached_to='camera_rgb_frame'>
+      <pose>0 0 0 -1.57 -0 -1.57</pose>
+    </frame>
+    <frame name='camera_rgb_optical_frame' attached_to='camera_rgb_optical_joint'/>
+    <frame name='camera_rgb_joint' attached_to='camera_link'>
+      <pose>0.003 0.011 0.009 0 -0 0</pose>
+    </frame>
+    <frame name='camera_rgb_frame' attached_to='camera_rgb_joint'/>
+    <frame name='camera_joint' attached_to='base_link'>
+      <pose>0.4 0 0 0 -0 0</pose>
+    </frame>
+    <frame name='camera_link' attached_to='camera_joint'/>
+    <frame name='front_left_joint' attached_to='base_link'>
+      <pose>0.4 0.65 0 0 -0 0</pose>
+    </frame>
+    <frame name='front_left' attached_to='front_left_joint'/>
+    <frame name='front_right_joint' attached_to='base_link'>
+      <pose>0.4 -0.65 0 0 -0 0</pose>
+    </frame>
+    <frame name='front_right' attached_to='front_right_joint'/>
+    <frame name='top_back_joint' attached_to='base_link'>
+      <pose>-0.4 0 0.25 0 -0 0</pose>
+    </frame>
+    <frame name='top_back' attached_to='top_back_joint'/>
+    <frame name='top_front_joint' attached_to='base_link'>
+      <pose>0.4 0 0.25 0 -0 0</pose>
+    </frame>
+    <frame name='top_front' attached_to='top_front_joint'/>
+    <frame name='top_left_joint' attached_to='base_link'>
+      <pose>0 0.65 0.25 0 -0 0</pose>
+    </frame>
+    <frame name='top_left' attached_to='top_left_joint'/>
+    <frame name='top_right_joint' attached_to='base_link'>
+      <pose>0 -0.65 0.25 0 -0 0</pose>
+    </frame>
+    <frame name='top_right' attached_to='top_right_joint'/>
+    <static>0</static>
+    <frame name='base_joint' attached_to='base_footprint'>
+      <pose>0 0 0.8 0 -0 0</pose>
+    </frame>
+    <frame name='base_link' attached_to='base_joint'/>
   </model>
 </sdf>

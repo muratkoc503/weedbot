@@ -16,6 +16,8 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(angles REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 add_executable(talker src/simple_publisher.cpp)
 ament_target_dependencies(talker rclcpp std_msgs)
@@ -26,10 +28,14 @@ ament_target_dependencies(listener rclcpp std_msgs)
 add_executable(image_sub src/opencv_ros2_sample.cpp)
 ament_target_dependencies(image_sub rclcpp std_msgs OpenCV sensor_msgs cv_bridge image_transport)
 
+add_executable(angle_follower src/angle_follower_sample.cpp)
+ament_target_dependencies(angle_follower rclcpp std_msgs angles geometry_msgs)
+
 install(TARGETS
   talker
   listener
   image_sub
+  angle_follower
   DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

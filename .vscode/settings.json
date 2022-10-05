@@ -7,6 +7,7 @@
         "/opt/ros/galactic/lib/python3.8/site-packages"
     ],
     "files.associations": {
-        "functional": "cpp"
+        "functional": "cpp",
+        "string": "cpp"
     }
 }

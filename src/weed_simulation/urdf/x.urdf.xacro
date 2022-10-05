@@ -699,7 +699,7 @@
 
 <!-- ########################### CAMERA ############################# -->
   <joint name="camera_joint" type="fixed">
-    <origin xyz="0.4 0 0" rpy="0 0 0"/>
+    <origin xyz="0.4 0 -0.25" rpy="0 0 0"/>
     <parent link="base_link"/>
     <child link="camera_link"/>
   </joint>
@@ -755,7 +755,7 @@
           </camera>
           <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
               <alwaysOn>true</alwaysOn>
-              <updateRate>0.0</updateRate>
+              <updateRate>30.0</updateRate>
               <cameraName>iRobot/camera</cameraName>
               <imageTopicName>image_raw</imageTopicName>
               <cameraInfoTopicName>camera_info</cameraInfoTopicName>
@@ -769,4 +769,194 @@
           </plugin>
       </sensor>
 </gazebo>
+
+
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+  
+    <!-- The following values are approximate, and the camera node
+     publishing TF values with actual calibrated camera extrinsic values -->
+    <xacro:property name="d435_cam_depth_to_left_ir_offset" value="0.0"/>
+    <xacro:property name="d435_cam_depth_to_right_ir_offset" value="-0.050"/>
+    <xacro:property name="d435_cam_depth_to_color_offset" value="0.015"/>
+  
+    <!-- The following values model the aluminum peripherial case for the
+    D435 camera, with the camera joint represented by the actual 
+    peripherial camera tripod mount -->
+    <xacro:property name="d435_cam_width" value="0.090"/>
+    <xacro:property name="d435_cam_height" value="0.025"/>
+    <xacro:property name="d435_cam_depth" value="0.02505"/>
+    <xacro:property name="d435_cam_mount_from_center_offset" value="0.0149"/>
+  
+    <!-- The following offset is relative the the physical D435 camera peripherial
+    camera tripod mount -->
+    <xacro:property name="d435_cam_depth_px" value="${d435_cam_mount_from_center_offset}"/>
+    <xacro:property name="d435_cam_depth_py" value="0.0175"/>
+    <xacro:property name="d435_cam_depth_pz" value="${d435_cam_height/2}"/>
+
+    <material name="realsense_camera_aluminum">
+    <color rgba="0.5 0.5 0.5 1"/>
+    </material>
+
+
+    <!-- camera body, with origin at bottom screw mount -->
+    <joint name="realsense_camera_joint" type="fixed">
+      <origin xyz="0.4 0 0.25" rpy="0 0 0"/>
+      <parent link="base_link"/>
+      <child link="realsense_camera_bottom_screw_frame" />
+    </joint>
+    <link name="realsense_camera_bottom_screw_frame"/>
+
+    <joint name="realsense_camera_link_joint" type="fixed">
+      <origin xyz="0 ${d435_cam_depth_py} ${d435_cam_depth_pz}" rpy="0 0 0"/>
+      <parent link="realsense_camera_bottom_screw_frame"/>
+      <child link="realsense_camera_link" />
+    </joint>
+
+    <link name="realsense_camera_link">
+      <visual>
+      <origin xyz="${d435_cam_mount_from_center_offset} ${-d435_cam_depth_py} 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+        <material name="realsense_camera_aluminum"/>
+      </visual>
+      <collision>
+        <origin xyz="0 ${-d435_cam_depth_py} 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="${d435_cam_depth} ${d435_cam_width} ${d435_cam_height}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <!-- The following are not reliable values, and should not be used for modeling -->
+        <mass value="0.564" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257" />
+      </inertial>
+    </link>
+   
+    <!-- camera depth joints and links -->
+    <joint name="realsense_camera_depth_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="realsense_camera_link"/>
+      <child link="realsense_camera_depth_frame" />
+    </joint>
+    <link name="realsense_camera_depth_frame"/>
+
+    <joint name="realsense_camera_depth_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="realsense_camera_depth_frame" />
+      <child link="realsense_camera_depth_optical_frame" />
+    </joint>
+    <link name="realsense_camera_depth_optical_frame"/>
+      
+    <!-- camera left IR joints and links -->
+    <joint name="realsense_camera_left_ir_joint" type="fixed">
+      <origin xyz="0 ${d435_cam_depth_to_left_ir_offset} 0" rpy="0 0 0" />
+      <parent link="realsense_camera_depth_frame" />
+      <child link="realsense_camera_left_ir_frame" />
+    </joint>
+    <link name="realsense_camera_left_ir_frame"/>
+
+    <joint name="realsense_camera_left_ir_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="realsense_camera_left_ir_frame" />
+      <child link="realsense_camera_left_ir_optical_frame" />
+    </joint>
+    <link name="realsense_camera_left_ir_optical_frame"/>
+
+    <!-- camera right IR joints and links -->
+    <joint name="realsense_camera_right_ir_joint" type="fixed">
+      <origin xyz="0 ${d435_cam_depth_to_right_ir_offset} 0" rpy="0 0 0" />
+      <parent link="realsense_camera_depth_frame" />
+      <child link="realsense_camera_right_ir_frame" />
+    </joint>
+    <link name="realsense_camera_right_ir_frame"/>
+
+    <joint name="realsense_camera_right_ir_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="realsense_camera_right_ir_frame" />
+      <child link="realsense_camera_right_ir_optical_frame" />
+    </joint>
+    <link name="realsense_camera_right_ir_optical_frame"/>
+
+    <!-- camera color joints and links -->
+    <joint name="realsense_camera_color_joint" type="fixed">
+      <origin xyz="0 ${d435_cam_depth_to_color_offset} 0" rpy="0 0 0" />
+      <parent link="realsense_camera_depth_frame" />
+      <child link="realsense_camera_color_frame" />
+    </joint>
+    <link name="realsense_camera_color_frame"/>
+
+    <joint name="realsense_camera_color_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="realsense_camera_color_frame" />
+      <child link="realsense_camera_color_optical_frame" />
+    </joint>
+    <link name="realsense_camera_color_optical_frame"/>
+
+    <!-- Load parameters to model's main link-->
+
+  <gazebo reference="realsense_camera_link">
+      <sensor type="camera" name="realsense_camera">
+          <update_rate>30.0</update_rate>
+          <camera name="head">
+              <horizontal_fov>1.3962634</horizontal_fov>
+              <image>
+                  <width>800</width>
+                  <height>600</height>
+                  <format>R8G8B8</format>
+              </image>
+              <clip>
+                  <near>0.02</near>
+                  <far>300</far>
+              </clip>
+              <noise>
+                  <type>gaussian</type>
+                  <mean>0.0</mean>
+                  <stddev>0.007</stddev>
+              </noise>
+          </camera>
+          <plugin name="realsense_camera_controller" filename="libgazebo_ros_camera.so">
+              <alwaysOn>true</alwaysOn>
+              <updateRate>30.0</updateRate>
+              <cameraName>realsense/camera</cameraName>
+              <imageTopicName>realsense/image_raw</imageTopicName>
+              <cameraInfoTopicName>realsense_camera_info</cameraInfoTopicName>
+              <frameName>realsense_camera_link</frameName>
+              <hackBaseline>0.07</hackBaseline>
+              <distortionK1>0.0</distortionK1>
+              <distortionK2>0.0</distortionK2>
+              <distortionK3>0.0</distortionK3>
+              <distortionT1>0.0</distortionT1>
+              <distortionT2>0.0</distortionT2>
+          </plugin>
+      </sensor>
+  </gazebo>
+
+    <gazebo reference="realsense_camera_link">
+      <sensor name="intel_realsense_r200_depth" type="depth">
+        <always_on>1</always_on>
+        <update_rate>1</update_rate>
+        <pose>0.064 -0.047 0.107 0 0 0</pose>
+        <camera name="realsense_depth_camera">
+        </camera>
+	      <plugin name="intel_realsense_r200_depth_driver" filename="libgazebo_ros_camera.so">
+            <ros>
+        <!-- 
+              <argument>custom_camera/image_raw:=custom_camera/custom_image</argument>
+              <argument>custom_camera/image_depth:=custom_camera/custom_image_depth</argument>
+              <argument>custom_camera/camera_info:=custom_camera/custom_info_raw</argument>
+              <argument>custom_camera/camera_info_depth:=custom_camera/custom_info_depth</argument>
+              <argument>custom_camera/points:=custom_camera/custom_points</argument> 
+        -->
+            </ros>
+            <camera_name>intel_realsense_r200_depth</camera_name>
+            <frame_name>realsense_camera_depth_optical_frame</frame_name>
+            <hack_baseline>0.07</hack_baseline>
+            <min_depth>0.001</min_depth>
+          </plugin>
+      </sensor>
+
+  </gazebo>
+
 </robot>

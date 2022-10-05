@@ -528,7 +528,7 @@
   </gazebo>
   <!-- ########################### CAMERA ############################# -->
   <joint name="camera_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0.4 0 0"/>
+    <origin rpy="0 0 0" xyz="0.4 0 -0.25"/>
     <parent link="base_link"/>
     <child link="camera_link"/>
   </joint>
@@ -580,7 +580,7 @@
       </camera>
       <plugin filename="libgazebo_ros_camera.so" name="camera_controller">
         <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
+        <updateRate>30.0</updateRate>
         <cameraName>iRobot/camera</cameraName>
         <imageTopicName>image_raw</imageTopicName>
         <cameraInfoTopicName>camera_info</cameraInfoTopicName>
@@ -591,6 +591,155 @@
         <distortionK3>0.0</distortionK3>
         <distortionT1>0.0</distortionT1>
         <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <material name="realsense_camera_aluminum">
+    <color rgba="0.5 0.5 0.5 1"/>
+  </material>
+  <!-- camera body, with origin at bottom screw mount -->
+  <joint name="realsense_camera_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.4 0 0.25"/>
+    <parent link="base_link"/>
+    <child link="realsense_camera_bottom_screw_frame"/>
+  </joint>
+  <link name="realsense_camera_bottom_screw_frame"/>
+  <joint name="realsense_camera_link_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0.0175 0.0125"/>
+    <parent link="realsense_camera_bottom_screw_frame"/>
+    <child link="realsense_camera_link"/>
+  </joint>
+  <link name="realsense_camera_link">
+    <visual>
+      <origin rpy="1.5707963267948966 0 1.5707963267948966" xyz="0.0149 -0.0175 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="realsense_camera_aluminum"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 -0.0175 0"/>
+      <geometry>
+        <box size="0.02505 0.09 0.025"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <!-- The following are not reliable values, and should not be used for modeling -->
+      <mass value="0.564"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257"/>
+    </inertial>
+  </link>
+  <!-- camera depth joints and links -->
+  <joint name="realsense_camera_depth_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="realsense_camera_link"/>
+    <child link="realsense_camera_depth_frame"/>
+  </joint>
+  <link name="realsense_camera_depth_frame"/>
+  <joint name="realsense_camera_depth_optical_joint" type="fixed">
+    <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
+    <parent link="realsense_camera_depth_frame"/>
+    <child link="realsense_camera_depth_optical_frame"/>
+  </joint>
+  <link name="realsense_camera_depth_optical_frame"/>
+  <!-- camera left IR joints and links -->
+  <joint name="realsense_camera_left_ir_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0.0 0"/>
+    <parent link="realsense_camera_depth_frame"/>
+    <child link="realsense_camera_left_ir_frame"/>
+  </joint>
+  <link name="realsense_camera_left_ir_frame"/>
+  <joint name="realsense_camera_left_ir_optical_joint" type="fixed">
+    <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
+    <parent link="realsense_camera_left_ir_frame"/>
+    <child link="realsense_camera_left_ir_optical_frame"/>
+  </joint>
+  <link name="realsense_camera_left_ir_optical_frame"/>
+  <!-- camera right IR joints and links -->
+  <joint name="realsense_camera_right_ir_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 -0.05 0"/>
+    <parent link="realsense_camera_depth_frame"/>
+    <child link="realsense_camera_right_ir_frame"/>
+  </joint>
+  <link name="realsense_camera_right_ir_frame"/>
+  <joint name="realsense_camera_right_ir_optical_joint" type="fixed">
+    <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
+    <parent link="realsense_camera_right_ir_frame"/>
+    <child link="realsense_camera_right_ir_optical_frame"/>
+  </joint>
+  <link name="realsense_camera_right_ir_optical_frame"/>
+  <!-- camera color joints and links -->
+  <joint name="realsense_camera_color_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0.015 0"/>
+    <parent link="realsense_camera_depth_frame"/>
+    <child link="realsense_camera_color_frame"/>
+  </joint>
+  <link name="realsense_camera_color_frame"/>
+  <joint name="realsense_camera_color_optical_joint" type="fixed">
+    <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
+    <parent link="realsense_camera_color_frame"/>
+    <child link="realsense_camera_color_optical_frame"/>
+  </joint>
+  <link name="realsense_camera_color_optical_frame"/>
+  <!-- Load parameters to model's main link-->
+  <gazebo reference="realsense_camera_link">
+    <sensor name="realsense_camera" type="camera">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>600</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin filename="libgazebo_ros_camera.so" name="realsense_camera_controller">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>30.0</updateRate>
+        <cameraName>realsense/camera</cameraName>
+        <imageTopicName>realsense/image_raw</imageTopicName>
+        <cameraInfoTopicName>realsense_camera_info</cameraInfoTopicName>
+        <frameName>realsense_camera_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <gazebo reference="realsense_camera_link">
+    <sensor name="intel_realsense_r200_depth" type="depth">
+      <always_on>1</always_on>
+      <update_rate>1</update_rate>
+      <pose>0.064 -0.047 0.107 0 0 0</pose>
+      <camera name="realsense_depth_camera">
+        </camera>
+      <plugin filename="libgazebo_ros_camera.so" name="intel_realsense_r200_depth_driver">
+        <ros>
+          <!-- 
+              <argument>custom_camera/image_raw:=custom_camera/custom_image</argument>
+              <argument>custom_camera/image_depth:=custom_camera/custom_image_depth</argument>
+              <argument>custom_camera/camera_info:=custom_camera/custom_info_raw</argument>
+              <argument>custom_camera/camera_info_depth:=custom_camera/custom_info_depth</argument>
+              <argument>custom_camera/points:=custom_camera/custom_points</argument> 
+        -->
+        </ros>
+        <camera_name>intel_realsense_r200_depth</camera_name>
+        <frame_name>realsense_camera_depth_optical_frame</frame_name>
+        <hack_baseline>0.07</hack_baseline>
+        <min_depth>0.001</min_depth>
       </plugin>
     </sensor>
   </gazebo>

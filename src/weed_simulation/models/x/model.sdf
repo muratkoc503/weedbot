@@ -2,15 +2,15 @@
   <model name='weed'>
     <link name='base_footprint'>
       <inertial>
-        <pose>0.00585 0.000256 0.82977 0 -0 0</pose>
+        <pose>0.002925 0.000256 0.82392 0 -0 0</pose>
         <mass>38.564</mass>
         <inertia>
-          <ixx>2.79374</ixx>
-          <ixy>-0.00389026</ixy>
-          <ixz>-0.0525039</ixz>
-          <iyy>1.3041</iyy>
-          <iyz>-0.00229705</iyz>
-          <izz>3.58797</izz>
+          <ixx>2.77765</ixx>
+          <ixy>-0.00194513</ixy>
+          <ixz>0.0182082</ixz>
+          <iyy>1.22133</iyy>
+          <iyz>0.00159322</iyz>
+          <izz>3.52128</izz>
         </inertia>
       </inertial>
       <collision name='base_footprint_fixed_joint_lump__back_left_collision'>
@@ -94,7 +94,7 @@
         </surface>
       </collision>
       <collision name='base_footprint_fixed_joint_lump__realsense_camera_link_collision_5'>
-        <pose>0.4 0 1.0625 0 -0 0</pose>
+        <pose>0.2 0 0.6625 0 -0 0</pose>
         <geometry>
           <box>
             <size>0.02505 0.09 0.025</size>
@@ -238,7 +238,7 @@
         </material>
       </visual>
       <visual name='base_footprint_fixed_joint_lump__realsense_camera_link_visual_5'>
-        <pose>0.4149 0 1.0625 1.5708 -0 1.5708</pose>
+        <pose>0.2149 0 0.6625 1.5708 -0 1.5708</pose>
         <geometry>
           <box>
             <size>0.1 0.1 0.1</size>
@@ -338,6 +338,7 @@
       </sensor>
       <sensor name='realsense_camera' type='camera'>
         <update_rate>30</update_rate>
+        <visualize>1</visualize>
         <camera name='head'>
           <horizontal_fov>1.39626</horizontal_fov>
           <image>
@@ -369,13 +370,13 @@
           <distortionT1>0.0</distortionT1>
           <distortionT2>0.0</distortionT2>
         </plugin>
-        <pose>0.4 0.0175 1.0625 0 -0 0</pose>
+        <pose>0.2 0.0175 0.6625 0 -0 0</pose>
       </sensor>
       <sensor name='intel_realsense_r200_depth' type='depth'>
         <always_on>1</always_on>
-        <update_rate>1</update_rate>
+        <update_rate>30</update_rate>
         <camera name='realsense_depth_camera'>
-          <horizontal_fov>1.047</horizontal_fov>
+          <horizontal_fov>1.39626</horizontal_fov>
           <image>
             <width>320</width>
             <height>240</height>
@@ -392,7 +393,7 @@
           <hack_baseline>0.07</hack_baseline>
           <min_depth>0.001</min_depth>
         </plugin>
-        <pose>0.464 -0.0295 1.1695 0 -0 0</pose>
+        <pose>0.2 0.0175 0.6625 0 -0 0</pose>
       </sensor>
     </link>
     <joint name='back_cl_j' type='revolute'>
@@ -838,7 +839,7 @@
     </frame>
     <frame name='realsense_camera_link' attached_to='realsense_camera_link_joint'/>
     <frame name='realsense_camera_joint' attached_to='base_link'>
-      <pose>0.4 0 0.25 0 -0 0</pose>
+      <pose>0.2 0 -0.15 0 -0 0</pose>
     </frame>
     <frame name='realsense_camera_bottom_screw_frame' attached_to='realsense_camera_joint'/>
     <frame name='top_back_joint' attached_to='base_link'>
